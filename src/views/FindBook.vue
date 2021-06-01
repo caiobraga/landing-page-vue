@@ -234,11 +234,7 @@ export default {
                   reserva:'{"id": '+localStorage.getItem('IdUser')+', "dias":'+this.dias+'}',
                   id_cadastro:responserefac.id_cadastro,
                 },
-                { headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
-          "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token"
-        }}
+                { headers: {}}
         ).then(response =>{
                         console.log(response.data.data)
                         //return(response.data.data)
