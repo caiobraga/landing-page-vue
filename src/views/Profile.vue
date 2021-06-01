@@ -53,7 +53,7 @@
                       type="button"
                       style="transition: all 0.15s ease 0s;"
                     >
-                      <a href="http://localhost:8080/livros">Encontre livros</a>
+                      <router-link to="/livros"><a href="">Encontre livros</a></router-link>
                     </button>
                   </div>
                   <div class="flex flex-row justify-center py-6 px-3 mt-32 sm:mt-0">
@@ -62,7 +62,7 @@
                       type="button"
                       style="transition: all 0.15s ease 0s;"
                     >
-                      <a href="http://localhost:8080/livrocadastro">Adicione seus livros</a>
+                      <router-link to="/livrocadastro"><a href="">Adicione seus livros</a></router-link>
                     </button>
                   </div>
                 </div>
@@ -124,7 +124,7 @@
                   id
                 </th>
                 <th scope="col" class="relative px-6 py-3">
-                  <a href="http://localhost:8080/livroeditar"><span class="sr-only">Edit</span></a>
+                  <router-link to="/login"><a href=""><span class="sr-only">Edit</span></a></router-link>
                 </th>
               </tr>
             </thead>

@@ -28,7 +28,7 @@
                 </div>
                 <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
                   <div class="text-gray-500 text-center mb-3 font-bold">
-                    <a href="https://landing-page-vue.vercel.app/profile">Voltar</a>
+                     <router-link to="/profile"><a href="">Voltar</a></router-link>
                   </div>
                   <form>
                     <div class="relative w-full mb-3">
