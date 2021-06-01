@@ -149,7 +149,7 @@ export default {
           localStorage.removeItem('errorMessage');
           localStorage.setItem('errorMessage', "Cadastro realizado com sucesso!")
           localStorage.setItem('error', true)
-          window.location.href = "http://localhost:8080/login";
+          window.location.href = "https://landing-page-vue.vercel.app/login";
         }
       }).catch(function (error){
         console.log(error)

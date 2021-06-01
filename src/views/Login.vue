@@ -131,7 +131,7 @@ export default {
               localStorage.setItem('error', false)
               localStorage.IdUser = response.data.data[item].id;
               console.log("logado")
-              window.location.href = "http://localhost:8080/profile";
+              window.location.href = "https://landing-page-vue.vercel.app/profile";
             }else{
               localStorage.removeItem('error');
               localStorage.removeItem('errorMessage');

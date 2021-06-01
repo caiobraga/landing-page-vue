@@ -28,13 +28,13 @@
       style="min-width: 12rem"
     >
      <router-link to="/login"> <a
-        href="http://localhost:8080/login"
+        href="https://landing-page-vue.vercel.app/login"
         class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
       >
         Entrar
       </a></router-link>
        <router-link to="/singin"><a
-        href="http://localhost:8080/singin"
+        href="https://landing-page-vue.vercel.app/singin"
         class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
       >
         Cadastrar

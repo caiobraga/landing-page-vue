@@ -9,7 +9,7 @@
       <!-- Brand -->
      <router-link to="/"> <a
         class="text-white text-sm uppercase lg:inline-block font-semibold"
-        href="http://localhost:8080/landing"
+        href="https://landing-page-vue.vercel.app/landing"
         >Clube do livro</a>  </router-link>
       >
       <!-- User -->
