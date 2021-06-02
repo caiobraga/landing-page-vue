@@ -34,6 +34,41 @@
       </section>
       <section class="relative py-16 bg-gray-300">
         <div class="container mx-auto px-4">
+                  <div v-if="showModal" class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex">
+      <div class="relative w-auto my-6 mx-auto max-w-3xl">
+        <!--content-->
+        <div class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+          <!--header-->
+          <div class="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+            <h3 class="text-3xl font-semibold">
+              Deletar livro
+            </h3>
+            <button class="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none" v-on:click="toggleModal()">
+              <span class="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                ×
+              </span>
+            </button>
+          </div>
+          <!--body-->
+          <div class="relative p-6 flex-auto">
+            <p class="my-4 text-blueGray-500 text-lg leading-relaxed">
+              deseja deletar esse livro?
+            </p>
+           
+          </div>
+          <!--footer-->
+          <div class="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+            <button class="text-red-500 bg-transparent border border-solid border-red-500 hover:bg-red-500 hover:text-white active:bg-red-600 font-bold uppercase text-sm px-6 py-3 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" v-on:click="toggleModal()">
+              não
+            </button>
+            <button v-on:click="toggleModal(), deleteBook()" class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+              sim
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-if="showModal" class="opacity-25 fixed inset-0 z-40 bg-black"></div>
           <div
             class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-64"
           >
@@ -114,7 +149,7 @@
                   id
                 </th>
                 <th scope="col" class="relative px-6 py-3">
-                  <router-link to="/login"><a href=""><span class="sr-only">Edit</span></a></router-link>
+                    <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
                 </th>
               </tr>
             </thead>
@@ -146,7 +181,7 @@
                   {{ person.id }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                   <button :key="person.id" :id="person.id" type="button" v-on:click="toggleModal(), getDeleteid($event)"> <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a></button>
                 </td>
               </tr>
             </tbody>
@@ -198,6 +233,7 @@ export default {
         email: 'jane.cooper@example.com',
     },
     book:[],
+    showModal: false,
     }
   },
   created () {
@@ -222,6 +258,9 @@ export default {
          console.log(error)
        })
     },
+     toggleModal: function(){
+      this.showModal = !this.showModal;
+    },
     UpdateUser(){
       let user = JSON.parse(localStorage.getItem('User'))
       console.log("user= "+user);
@@ -229,8 +268,34 @@ export default {
       console.log(user)
       this.user=user;
     },
-    getBook(){
-
+    getDeleteid(event){
+    let bookid = event.explicitOriginalTarget.parentNode.id
+    localStorage.removeItem('idLivro');
+      localStorage.setItem('idLivro', bookid)
+    },
+    deleteBook(){
+        let bookid = localStorage.getItem('idLivro')
+        axios.get("https://laravel-api-php.herokuapp.com/api/books/"+bookid,{}).then(response =>{
+              console.log(JSON.parse(response.data.data.reserva).dias)
+              if(JSON.parse(response.data.data.reserva).dias > 0){
+                alert("livro em reserva não pode ser deletado")
+              }else{
+              axios.delete("https://laravel-api-php.herokuapp.com/api/books/"+bookid,{}).then(response =>{
+              console.log(response.data.data)
+              alert("livro deletado com sucesso")
+          
+            
+              //return(response.data.data)
+            }).catch(function(error){
+              console.log(error)
+              alert("Um erro ocorreu: "+ error)
+            })
+              }
+          
+            }).catch(function(error){
+              console.log(error)
+            })
+        
     }
   },
   mounted() {

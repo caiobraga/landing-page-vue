@@ -107,7 +107,7 @@
                 </td>
                
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                 <button  type="button" v-on:click="toggleModal()"> <a href="#" class="text-indigo-600 hover:text-indigo-900">reservar</a></button>
+                 <button :key="person.id" :id="person.id" type="button" v-on:click="toggleModal(), definirId($event)"> <a href="#" class="text-indigo-600 hover:text-indigo-900">reservar</a></button>
                 </td>
               </tr>
             </tbody>
@@ -147,7 +147,7 @@
             <button class="text-red-500 bg-transparent border border-solid border-red-500 hover:bg-red-500 hover:text-white active:bg-red-600 font-bold uppercase text-sm px-6 py-3 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" v-on:click="toggleModal()">
               Close
             </button>
-            <button v-for="person in book" :key="person.id" v-on:click="reservarLivro($event), toggleModal()" :id="person.id" class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+            <button v-on:click="reservarLivro(), toggleModal()" class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
               Save Changes
             </button>
           </div>
@@ -205,9 +205,9 @@ export default {
       toggleModal: function(){
       this.showModal = !this.showModal;
     },
-     reservarLivro(event){
+     reservarLivro(){
     // console.log(event.explicitOriginalTarget)
-      let idlivro = event.explicitOriginalTarget.id
+      let idlivro = localStorage.getItem('idLivro')
        axios.get("https://laravel-api-php.herokuapp.com/api/books/"+idlivro,{}).then(response =>{
               console.log(response.data.data)
               console.log(JSON.parse(response.data.data.reserva).dias)
@@ -237,11 +237,18 @@ export default {
                 { headers: {}}
         ).then(response =>{
                         console.log(response.data.data)
+                        alert("Parabéms, você reservou o livro")
                         //return(response.data.data)
                       }).catch(function(error){
                         console.log(error)
                       })
-    }
+    },
+    definirId(event){
+     let idlivro = event.explicitOriginalTarget.parentElement.id
+     console.log(event.explicitOriginalTarget.parentElement.id)
+     localStorage.removeItem('idLivro');
+      localStorage.setItem('idLivro', idlivro)
+   },
    },
   mounted() {
           axios.get("https://laravel-api-php.herokuapp.com/api/books",{}).then(response =>{
