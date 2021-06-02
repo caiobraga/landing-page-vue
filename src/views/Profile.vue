@@ -71,21 +71,11 @@
                     <div class="mr-4 p-3 text-center">
                       <span
                         class="text-xl font-bold block uppercase tracking-wide text-gray-700"
-                        >{{user.books.length}}</span
+                        >{{book.length}}</span
                       ><span class="text-sm text-gray-500">Livros cadastrados</span>
                     </div>
-                    <div class="mr-4 p-3 text-center">
-                      <span
-                        class="text-xl font-bold block uppercase tracking-wide text-gray-700"
-                        >0</span
-                      ><span class="text-sm text-gray-500">Livros alugados</span>
-                    </div>
-                    <div class="lg:mr-4 p-3 text-center">
-                      <span
-                        class="text-xl font-bold block uppercase tracking-wide text-gray-700"
-                        >0</span
-                      ><span class="text-sm text-gray-500">Dias até a devolução</span>
-                    </div>
+                    
+                    
                   </div>
                 </div>
               </div>
@@ -118,7 +108,7 @@
                   Descrição
                 </th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Reserva
+                  Numero de dias da reserva
                 </th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   id
@@ -129,7 +119,7 @@
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-              <tr v-for="person in user.books" :key="person.id">
+              <tr v-for="person in book" :key="person.id">
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="flex items-center">
                     <div class="flex-shrink-0 h-10 w-10">
@@ -137,25 +127,23 @@
                     </div>
                     <div class="ml-4">
                       <div class="text-sm font-medium text-gray-900">
-                        {{ person }}
+                        {{ person.titulo }}
                       </div>
-                      <div class="text-sm text-gray-500">
-                        {{ person }}
-                      </div>
+
                     </div>
                   </div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="text-sm text-gray-900">{{ person.title }}</div>
-                  <div class="text-sm text-gray-500">{{ person.department }}</div>
+                  <div class="text-sm text-gray-500">{{ person.conteudo }}</div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                    Active
+                    {{JSON.parse(person.reserva).dias}}
                   </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {{ person.role }}
+                  {{ person.id }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
@@ -208,7 +196,8 @@ export default {
         books: '[]',
         reserva: 'Optimization',
         email: 'jane.cooper@example.com',
-    }
+    },
+    book:[],
     }
   },
   created () {
@@ -216,16 +205,17 @@ export default {
     // already being observed
     this.getUser()
     this.UpdateUser()
+    this.getUser()
     console.log(this.user)
   },
   
    methods: {
-    async getUser() {
-       await axios.get("https://laravel-api-php.herokuapp.com/api/user/"+localStorage.getItem('IdUser'),{}).then(function(response){
+     getUser() {
+        axios.get("https://laravel-api-php.herokuapp.com/api/user/"+localStorage.getItem('IdUser'),{}).then(function(response){
          if(localStorage.getItem('User') == response.data.data){
            console.log(response.data.data)
           localStorage.removeItem('User');
-          localStorage.setItem('User', JSON.parse(JSON.stringify(response.data.data)))
+          localStorage.setItem('User', JSON.stringify(response.data.data))
           localStorage.setItem('error', false)
          }
        }).catch(function(error){
@@ -234,10 +224,33 @@ export default {
     },
     UpdateUser(){
       let user = JSON.parse(localStorage.getItem('User'))
-      user.books = user.books.split(",");
+      console.log("user= "+user);
+      //user.books = user.books.split(",");
       console.log(user)
       this.user=user;
+    },
+    getBook(){
+
     }
   },
+  mounted() {
+          axios.get("https://laravel-api-php.herokuapp.com/api/books",{}).then(response =>{
+              console.log(response.data.data)
+
+          
+              for (var i = 0, l = response.data.data.length; i < l; i++) {
+                  console.log(response.data.data[i])
+                  if(response.data.data[i].id_cadastro == localStorage.getItem('IdUser')){
+                    let books = this.book
+                    books.push(response.data.data[i])
+                    this.book = books
+                  }
+                }
+              this.book = response.data.data
+              //return(response.data.data)
+            }).catch(function(error){
+              console.log(error)
+            })
+        }
 }
 </script>
